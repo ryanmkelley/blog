@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LLM Domain Strengths & Benchmarks (June 2025)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  
+  :root {
+    --bg-primary: #0a0a0b;
+    --bg-secondary: #111113;
+    --bg-card: #16161a;
+    --bg-table: #1a1a1f;
+    --fg-primary: #ffffff;
+    --fg-secondary: #a1a1aa;
+    --fg-muted: #71717a;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --accent-light: rgba(99, 102, 241, 0.1);
+    --border: #27272a;
+    --border-light: #3f3f46;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: var(--bg-primary);
+    color: var(--fg-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .header {
+    padding: 3rem 0 2rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+  
+  .company-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  
+  .main-title {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    margin: 0 0 1rem;
+    background: linear-gradient(135deg, var(--fg-primary) 0%, var(--fg-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--fg-secondary);
+    font-weight: 400;
+    margin: 0;
+  }
+  
+  .table-section {
+    margin: 4rem 0;
+  }
+  
+  .table-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  thead {
+    background: var(--bg-table);
+  }
+  
+  th {
+    padding: 1.5rem 1.25rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--fg-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: all 0.2s ease;
+  }
+  
+  tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  td {
+    padding: 1.25rem;
+    vertical-align: top;
+  }
+  
+  td:first-child {
+    font-weight: 500;
+    color: var(--fg-primary);
+  }
+  
+  td:nth-child(2) {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  
+  td:nth-child(3) {
+    color: var(--fg-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .content-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin: 3rem 0;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--fg-primary);
+    margin: 0 0 2rem;
+    letter-spacing: -0.01em;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--fg-primary);
+    margin: 0 0 1.5rem;
+  }
+  
+  .quick-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(10px);
+    flex-wrap: wrap;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    color: var(--fg-secondary);
+  }
+  
+  .nav-item:hover {
+    background: var(--accent-light);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+  
+  .domain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .domain-card {
+    background: var(--bg-table);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .domain-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px var(--accent-light);
+  }
+  
+  .domain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .domain-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--fg-primary);
+  }
+  
+  .performance-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .performance-badge.top {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+  }
+  
+  .performance-badge.high {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+  }
+  
+  .performance-badge.medium {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+  }
+  
+  .performance-badge.low {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+  }
+  
+  .model-leader {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .benchmark {
+    font-size: 0.9rem;
+    color: var(--fg-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .runner-up {
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+  }
+  
+  .runner-up.warning {
+    color: #ef4444;
+    font-weight: 500;
+  }
+  
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .insight-card {
+    background: var(--bg-table);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+  
+  .insight-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--accent-light);
+  }
+  
+  .insight-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .insight-card h3 {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    color: var(--fg-primary);
+  }
+  
+  .insight-card p {
+    margin: 0;
+    color: var(--fg-secondary);
+    line-height: 1.6;
+  }
+  
+  .recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  
+  .rec-card {
+    background: var(--bg-table);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+  }
+  
+  .rec-card:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+  
+  .rec-card h4 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    color: var(--fg-primary);
+  }
+  
+  .rec-model {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  
+  .rec-score {
+    font-size: 0.875rem;
+    color: var(--fg-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .rec-note {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+  }
+  
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  .resource-card {
+    background: var(--bg-table);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  
+  .resource-card h4 {
+    margin: 0 0 1rem;
+    color: var(--fg-primary);
+    font-size: 1.1rem;
+  }
+  
+  .resource-card ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .resource-card li {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  
+  .resource-card li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: bold;
+  }
+  
+  li {
+    color: var(--fg-secondary);
+    line-height: 1.6;
+  }
+  
+  strong {
+    color: var(--fg-primary);
+    font-weight: 600;
+  }
+  
+  a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+  }
+  
+  .footer {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin: 3rem 0 2rem;
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .source-group h4 {
+    color: var(--accent);
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+  
+  .source-group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .source-group li {
+    margin-bottom: 0.5rem;
+    color: var(--fg-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  @media (max-width: 1024px) {
+    .container {
+      padding: 0 1.5rem;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    table {
+      min-width: 700px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
+    
+    .header {
+      padding: 2rem 0 1.5rem;
+      margin-bottom: 3rem;
+    }
+    
+    .content-section,
+    .footer {
+      padding: 2rem;
+    }
+    
+    th, td {
+      padding: 1rem 0.75rem;
+    }
+    
+    .main-title {
+      font-size: 2rem;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="company-name">Conifer Technologies</div>
+      <h1 class="main-title">Large Language Model Domain Strengths</h1>
+      <p class="subtitle">Snapshot as of June 19, 2025</p>
+    </header>
+
+    <!-- Quick Navigation -->
+    <nav class="quick-nav">
+      <div class="nav-item" onclick="scrollToSection('rankings')">
+        <span>Current Rankings</span>
+      </div>
+      <div class="nav-item" onclick="scrollToSection('recommendations')">
+        <span>Recommendations</span>
+      </div>
+      <div class="nav-item" onclick="scrollToSection('resources')">
+        <span>Resources</span>
+      </div>
+      <div class="nav-item" onclick="scrollToSection('insights')">
+        <span>Key Insights</span>
+      </div>
+    </nav>
+
+    <!-- Quick Model Selection Guide Section (moved to top) -->
+    <section id="recommendations" class="content-section">
+      <h2>Quick Model Selection Guide</h2>
+      <div class="recommendations-grid">
+        <div class="rec-card">
+          <h4>Software Engineering</h4>
+          <div class="rec-model">Claude 4 Opus/Sonnet</div>
+          <div class="rec-score">72%+ SWE-bench</div>
+          <div class="rec-note">Clear leadership in coding tasks</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Mathematics</h4>
+          <div class="rec-model">DeepSeek-R1</div>
+          <div class="rec-score">97.3% MATH-500</div>
+          <div class="rec-note">Exceptional value proposition</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Scientific Research</h4>
+          <div class="rec-model">Gemini 2.5 Pro</div>
+          <div class="rec-score">86.4% GPQA</div>
+          <div class="rec-note">Strong cost-performance</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Medical Applications</h4>
+          <div class="rec-model">Med-Gemini / Claude 3.5</div>
+          <div class="rec-score">Context dependent</div>
+          <div class="rec-note">Requires careful validation</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Hardware Design</h4>
+          <div class="rec-model">GPT-4o / CodeV-CodeQwen</div>
+          <div class="rec-score">Domain specific</div>
+          <div class="rec-note">Specialized fine-tuning helps</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Legal Tasks</h4>
+          <div class="rec-model">OpenAI o1 Preview</div>
+          <div class="rec-score">LegalBench leader</div>
+          <div class="rec-note">Best rule application</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Web Development</h4>
+          <div class="rec-model">Claude 4 Sonnet (practical)</div>
+          <div class="rec-score">Real-world leader</div>
+          <div class="rec-note">Despite low benchmark scores</div>
+        </div>
+
+        <div class="rec-card">
+          <h4>Firmware Development</h4>
+          <div class="rec-model">Claude 4 / GPT-4o</div>
+          <div class="rec-score">Best available</div>
+          <div class="rec-note">No specialized benchmarks exist</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Current Rankings Section -->
+    <section id="rankings" class="content-section">
+      <h2>Current Domain Leaders</h2>
+      <div class="domain-grid">
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Software Engineering</h3>
+            <div class="performance-badge top">72.7%</div>
+          </div>
+          <div class="model-leader">Claude 4 Sonnet</div>
+          <div class="benchmark">SWE-bench Verified</div>
+          <div class="runner-up">Also: Claude 4 Opus (72.5%)</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Pure Mathematics</h3>
+            <div class="performance-badge top">97.3%</div>
+          </div>
+          <div class="model-leader">DeepSeek-R1</div>
+          <div class="benchmark">MATH-500</div>
+          <div class="runner-up">Also: o4-mini (93.4% AIME)</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Scientific Reasoning</h3>
+            <div class="performance-badge high">86.4%</div>
+          </div>
+          <div class="model-leader">Gemini 2.5 Pro</div>
+          <div class="benchmark">GPQA Diamond</div>
+          <div class="runner-up">Strong cost-performance</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Medical USMLE</h3>
+            <div class="performance-badge high">91.1%</div>
+          </div>
+          <div class="model-leader">Med-Gemini</div>
+          <div class="benchmark">MedQA</div>
+          <div class="runner-up warning">Real clinical: 62-69%</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Hardware Design</h3>
+            <div class="performance-badge medium">77.6%</div>
+          </div>
+          <div class="model-leader">CodeV-CodeQwen</div>
+          <div class="benchmark">VerilogEval-machine</div>
+          <div class="runner-up">Also: GPT-4o HDL (95.3%)</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Legal Reasoning</h3>
+            <div class="performance-badge medium">Leading</div>
+          </div>
+          <div class="model-leader">OpenAI o1 Preview</div>
+          <div class="benchmark">LegalBench</div>
+          <div class="runner-up">+1.7% over competitors</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Web Development</h3>
+            <div class="performance-badge low">25.1%*</div>
+          </div>
+          <div class="model-leader">Claude 3.7 Sonnet</div>
+          <div class="benchmark">Web-Bench (synthetic)</div>
+          <div class="runner-up warning">*Benchmark-reality gap likely</div>
+        </div>
+
+        <div class="domain-card">
+          <div class="domain-header">
+            <h3>Firmware Development</h3>
+            <div class="performance-badge low">Limited</div>
+          </div>
+          <div class="model-leader">No clear leader</div>
+          <div class="benchmark">No standardized benchmarks</div>
+          <div class="runner-up warning">Major evaluation gap</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recommendations Section (removed, now at top) -->
+
+    <!-- Resources Section -->
+    <section id="resources" class="content-section">
+      <h2>Evaluation Resources</h2>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <h4>Live Benchmarks</h4>
+          <ul>
+            <li><a href="https://www.vellum.ai/llm-leaderboard">Vellum AI Leaderboard</a> - Comprehensive aggregator</li>
+            <li><a href="https://chat.lmsys.org">Chatbot Arena</a> - Blind A/B comparisons</li>
+            <li><a href="https://crfm.stanford.edu/helm/latest/">Stanford HELM</a> - Academic benchmarks</li>
+          </ul>
+        </div>
+
+        <div class="resource-card">
+          <h4>Specialized Benchmarks</h4>
+          <ul>
+            <li><a href="https://github.com/LiveBench/LiveBench">LiveBench</a> - Contamination-resistant</li>
+            <li><a href="https://www.vals.ai/benchmarks/legal_bench-02-03-2025">LegalBench</a> - Legal reasoning</li>
+            <li><a href="https://arxiv.org/html/2501.14654v2">MedAgentBench</a> - Medical agents</li>
+          </ul>
+        </div>
+
+        <div class="resource-card">
+          <h4>Hardware & Engineering</h4>
+          <ul>
+            <li><a href="https://arxiv.org/html/2407.10424v4">CodeV Framework</a> - Verilog generation</li>
+            <li><a href="https://arxiv.org/html/2407.18333v1">AutoVCoder</a> - HDL automation</li>
+            <li><a href="https://arxiv.org/abs/2505.07473">Web-Bench</a> - Web development</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Insights Section (moved to bottom) -->
+    <section id="insights" class="content-section">
+      <h2>Key Insights for 2025</h2>
+      <div class="insights-grid">
+        <div class="insight-card breakthrough">
+          <div class="insight-icon">🧠</div>
+          <h3>Hybrid Reasoning Architecture</h3>
+          <p>Models now dynamically switch between instant responses and extended thinking modes, with reasoning steps built-in rather than prompt-dependent.</p>
+        </div>
+
+        <div class="insight-card warning">
+          <div class="insight-icon">⚠️</div>
+          <h3>Benchmark-Reality Gap</h3>
+          <p>Medical diagnostic accuracy drops to 1/10th of MCQA performance in real scenarios. Web development shows only 25% success despite high coding scores.</p>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon">📊</div>
+          <h3>Contamination Crisis</h3>
+          <p>Models show 39.4% average performance drops on evolved benchmarks, revealing significant overfitting to traditional tests like HumanEval.</p>
+        </div>
+
+        <div class="insight-card">
+          <div class="insight-icon">💰</div>
+          <h3>Cost-Performance Leaders</h3>
+          <p>DeepSeek-R1 offers exceptional math performance at 90-95% lower cost than OpenAI o-series. Claude 4 pricing varies dramatically ($3-75/M tokens).</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <h3>Updated Research Sources</h3>
+      <div class="footer-grid">
+        <div class="source-group">
+          <h4>Model Documentation</h4>
+          <ul>
+            <li>Anthropic. "Claude 4 System Card." May 2025.</li>
+            <li>Google DeepMind. "Gemini 2.5 Technical Report." March 2025.</li>
+            <li>OpenAI. "o3 and o4-mini Model Cards." April 2025.</li>
+          </ul>
+        </div>
+        
+        <div class="source-group">
+          <h4>Benchmark Studies</h4>
+          <ul>
+            <li>LiveBench Consortium. "Contamination-Free LLM Evaluation." 2025.</li>
+            <li>DeepSeek AI. "R1 Mathematical Reasoning Report." January 2025.</li>
+            <li>Vellum AI. "LLM Leaderboard Aggregator." June 2025.</li>
+          </ul>
+        </div>
+        
+        <div class="source-group">
+          <h4>Domain-Specific Research</h4>
+          <ul>
+            <li>CodeV Team. "Verilog Generation via Multi-Level Summarization." arXiv 2024.</li>
+            <li>MedAgentBench. "Realistic Virtual EHR Environment." arXiv 2025.</li>
+            <li>Web-Bench. "LLM Code Benchmark for Web Standards." arXiv 2025.</li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    function scrollToSection(sectionId) {
+      document.getElementById(sectionId).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  </script>
