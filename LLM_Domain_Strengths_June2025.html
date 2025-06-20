@@ -338,11 +338,17 @@
     border-radius: 10px;
     padding: 1.25rem;
     transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
   }
   
   .rec-card:hover {
     border-color: var(--accent);
     background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-light);
   }
   
   .rec-card h4 {
@@ -514,11 +520,11 @@
 
     <!-- Quick Navigation -->
     <nav class="quick-nav">
-      <div class="nav-item" onclick="scrollToSection('rankings')">
-        <span>Current Rankings</span>
-      </div>
       <div class="nav-item" onclick="scrollToSection('recommendations')">
         <span>Recommendations</span>
+      </div>
+      <div class="nav-item" onclick="scrollToSection('rankings')">
+        <span>Current Rankings</span>
       </div>
       <div class="nav-item" onclick="scrollToSection('resources')">
         <span>Resources</span>
@@ -532,61 +538,61 @@
     <section id="recommendations" class="content-section">
       <h2>Quick Model Selection Guide</h2>
       <div class="recommendations-grid">
-        <div class="rec-card">
+        <a href="https://www.anthropic.com/" target="_blank" class="rec-card">
           <h4>Software Engineering</h4>
           <div class="rec-model">Claude 4 Opus/Sonnet</div>
           <div class="rec-score">72%+ SWE-bench</div>
           <div class="rec-note">Clear leadership in coding tasks</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://www.deepseek.com/" target="_blank" class="rec-card">
           <h4>Mathematics</h4>
           <div class="rec-model">DeepSeek-R1</div>
           <div class="rec-score">97.3% MATH-500</div>
           <div class="rec-note">Exceptional value proposition</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://deepmind.google/technologies/gemini/" target="_blank" class="rec-card">
           <h4>Scientific Research</h4>
           <div class="rec-model">Gemini 2.5 Pro</div>
           <div class="rec-score">86.4% GPQA</div>
           <div class="rec-note">Strong cost-performance</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://deepmind.google/technologies/gemini/" target="_blank" class="rec-card">
           <h4>Medical Applications</h4>
           <div class="rec-model">Med-Gemini / Claude 3.5</div>
           <div class="rec-score">Context dependent</div>
           <div class="rec-note">Requires careful validation</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://openai.com/" target="_blank" class="rec-card">
           <h4>Hardware Design</h4>
           <div class="rec-model">GPT-4o / CodeV-CodeQwen</div>
           <div class="rec-score">Domain specific</div>
           <div class="rec-note">Specialized fine-tuning helps</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://openai.com/" target="_blank" class="rec-card">
           <h4>Legal Tasks</h4>
           <div class="rec-model">OpenAI o1 Preview</div>
           <div class="rec-score">LegalBench leader</div>
           <div class="rec-note">Best rule application</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://www.anthropic.com/" target="_blank" class="rec-card">
           <h4>Web Development</h4>
           <div class="rec-model">Claude 4 Sonnet (practical)</div>
           <div class="rec-score">Real-world leader</div>
           <div class="rec-note">Despite low benchmark scores</div>
-        </div>
+        </a>
 
-        <div class="rec-card">
+        <a href="https://www.anthropic.com/" target="_blank" class="rec-card">
           <h4>Firmware Development</h4>
           <div class="rec-model">Claude 4 / GPT-4o</div>
           <div class="rec-score">Best available</div>
           <div class="rec-note">No specialized benchmarks exist</div>
-        </div>
+        </a>
       </div>
     </section>
 
